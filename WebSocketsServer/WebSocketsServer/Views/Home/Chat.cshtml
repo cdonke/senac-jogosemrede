@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Chat";
+}
+
+@section Scripts {
+<script src="~/scripts/knockout-3.4.2.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var SERVER = "Server";
+    var CLIENT = "Client";
+    
+    function Message(src, dst, msg){
+        this.source = src;
+        this.destination = dst;
+        this.message = msg;
+    }
+    
+    function ViewModel()
+    {
+        var self = this;
+        var ws;
+    
+        self.message = ko.observable();
+        self.logs = ko.observableArray([]);
+    
+        self.connect = function() {
+            ws = new WebSocket("ws://" + window.location.host + "/ws");
+            ws.onopen = function () {
+                var msg = new Message(SERVER, CLIENT, "Connected");
+                self.logs.push(msg);
+            };
+            ws.onmessage = function (evt) {
+                var msg = new Message(SERVER, CLIENT, evt.data);
+                self.logs.push(msg);    
+            };
+            ws.onerror = function (evt) {
+                var msg = new Message(SERVER, CLIENT, evt.message);
+                self.logs.push(msg);    
+            };
+            ws.onclose = function () {
+                var msg = new Message(CLIENT, SERVER, "Disconnected");
+                self.logs.push(msg);    
+            };
+
+            self.logs.push(new Message(CLIENT, SERVER, "Connecting"));
+        }
+        self.disconnect = function(){
+            ws.close();
+        }
+        self.send = function() {
+            if (ws.readyState == WebSocket.OPEN) {
+                self.logs.push(new Message(CLIENT, SERVER, "Sending: " + self.message()));
+                ws.send(self.message());
+            }
+            else {
+                self.logs.push(new Message(CLIENT, CLIENT, "Connection is closed"));
+            }
+        }
+    
+        
+    }
+
+    var vm = new ViewModel();
+    ko.applyBindings(vm);
+</script>
+}
+
+<h1>Exemplo de aplicação WebSockets</h1>
+
+<input type="button" value="Connect" data-bind="click: connect" />
+<input type="button" value="Disconnect" data-bind="click: disconnect" /><br />
+<input type="text" data-bind="value: message" />
+<input type="button" value="Send" data-bind="click: send" /><br />
+
+<h2>Histórico de comunicação</h2>
+<table>
+    <thead>
+        <tr>
+            <th>De</th>
+            <th>Para</th>
+            <th>Mensagem</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: logs">
+        <tr>
+            <td data-bind="text: source"></td>
+            <td data-bind="text: destination"></td>
+            <td data-bind="text: message"></td>
+        </tr>
+    </tbody>
+</table>
