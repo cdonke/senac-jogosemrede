@@ -4,7 +4,7 @@
 }
 
 @section Scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
     var viewModel = function () {
         var self = this;
         this.appUri = ko.observable("@mobileSettings.Value.applicationUri");
@@ -32,7 +32,7 @@
         }
         this.Adicionar = function () {
             var data = ko.toJSON(self.player);
-        
+
             $.ajax({
                 type: "POST",
                 url: "/api/WSMobileServices/"+self.player.game(),
@@ -47,7 +47,7 @@
 
         this.Atualizar = function () {
             var data = ko.toJSON(self.player);
-        
+
             $.ajax({
                 type: "POST",
                 url: "/api/WSMobileServices/"+self.player.game()+"/update",
@@ -72,7 +72,7 @@
     }
 
     ko.applyBindings(new viewModel());
-</script>
+    </script>
 }
 
 <div class="container">
@@ -84,7 +84,7 @@
         </div>
 
         <div class="form-group">
-            <a href="/Downloads/AzureMobileServicesUniversalPlugin.zip">Azure Mobile Services Universal Plugin</a>
+            <a href="~/Downloads/azure-mobile-client.zip">Azure Mobile Services Client</a>
         </div>
     </div>
 
@@ -110,10 +110,10 @@
                     <input type="text" class="form-control" data-bind="value: player.score" />
                 </div>
             </div>
-        
+
             <div class="col-md-4">
                 <h2>Ações:</h2>
-                <br/>
+                <br />
                 <button class="btn col-md-5" data-bind="click: Adicionar">Adicionar</button>
                 <button class="btn col-md-5 col-md-offset-1" data-bind="click: Atualizar">Atualizar</button>
 

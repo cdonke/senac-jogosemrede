@@ -5,11 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\downloads\" />
     <Folder Include="wwwroot\scripts\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Models\" />
@@ -26,5 +27,9 @@
 
   <ItemGroup>
     <Content Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\senac-games - Web Deploy.pubxml" />
   </ItemGroup>
 </Project>
