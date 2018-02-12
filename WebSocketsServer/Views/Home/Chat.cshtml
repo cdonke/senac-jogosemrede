@@ -63,27 +63,49 @@
 </script>
 }
 
-<h1>Exemplo de aplicação WebSockets</h1>
+<div class="container">
+    <div class="row">
+        <h1>Exemplo de aplicação WebSockets</h1>
+    </div>
+    
+    <p class="row">
+        <div class="col-md-1">
+            <input type="button" class="btn btn-primary" value="Connect" data-bind="click: connect" />
+        </div>
+        <div class="col-md-1">
+            <input type="button" class="btn" value="Disconnect" data-bind="click: disconnect" /><br />
+        </div>
+    </p>
 
-<input type="button" value="Connect" data-bind="click: connect" />
-<input type="button" value="Disconnect" data-bind="click: disconnect" /><br />
-<input type="text" data-bind="value: message" />
-<input type="button" value="Send" data-bind="click: send" /><br />
+    <p class="row">
+        <div class="col-md-8">
+            <input type="text" class="form-control" data-bind="value: message" />
+        </div>
+        <div class="col-md-1">
+            <input type="button" class="btn btn-primary" value="Send" data-bind="click: send" />
+        </div>
+    </p>
 
-<h2>Histórico de comunicação</h2>
-<table>
-    <thead>
-        <tr>
-            <th>De</th>
-            <th>Para</th>
-            <th>Mensagem</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: logs">
-        <tr>
-            <td data-bind="text: source"></td>
-            <td data-bind="text: destination"></td>
-            <td data-bind="text: message"></td>
-        </tr>
-    </tbody>
-</table>
+    <div class="row">
+        <h2 class="col-md-12">Histórico de comunicação</h2>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-2">De</th>
+                    <th class="col-md-2">Para</th>
+                    <th class="col-md-8">Mensagem</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: logs">
+                <tr>
+                    <td data-bind="text: source"></td>
+                    <td data-bind="text: destination"></td>
+                    <td data-bind="text: message"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
