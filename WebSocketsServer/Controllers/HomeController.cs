@@ -16,7 +16,13 @@ namespace WebSocketsServer.Controllers
             return View();
         }
 
-        public IActionResult Chat(){
+        public IActionResult Chat()
+        {
+            return View();
+        }
+
+        public IActionResult MobileServices()
+        {
             return View();
         }
     }

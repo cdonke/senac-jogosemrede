@@ -45,10 +45,10 @@ namespace WebSocketsServer.Controllers
             return leader;
         }
 
-        [HttpPut]
-        public async Task<bool> Put(string game, [FromBody]Models.Leaderboard leader)
+        [HttpPost]
+        [Route("update")]
+        public async Task<bool> Update([FromBody]Models.Leaderboard leader)
         {
-            leader.game = game;
             await Table.UpdateAsync(leader);
             return true;
         }

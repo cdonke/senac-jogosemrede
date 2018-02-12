@@ -5,6 +5,7 @@ namespace WebSocketsServer.Models
 {
     public class Leaderboard
     {
+        [JsonProperty(PropertyName = "id")]
         public Guid? Id { get; set; }
 
         [JsonProperty(PropertyName = "username")]

@@ -4,6 +4,13 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/bootstrap.css">
+    </environment>
+    <environment include="Production">
+        <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    </environment>
 </head>
 <body>
     <div>
@@ -11,10 +18,14 @@
     </div>
 
     <environment include="Development">
-        <script type="text/javascript" src="/scripts/jquery-2.1.4.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-2.1.4.js"></script>
+        <script type="text/javascript" src="~/scripts/knockout-3.4.2.js"></script>
+        <script type="text/javascript" src="~/scripts/bootstrap.js"></script>
     </environment>
     <environment include="Production">
         <script type="text/javascript" src="/scripts/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="~/scripts/knockout-3.4.2.js"></script>
+        <script type="text/javascript" src="~/scripts/bootstrap.min.js"></script>
     </environment>
         
     @RenderSection("Scripts", required: false)
