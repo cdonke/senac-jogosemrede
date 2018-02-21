@@ -10,7 +10,6 @@
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\downloads\" />
     <Folder Include="wwwroot\scripts\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Models\" />
