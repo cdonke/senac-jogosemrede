@@ -44,7 +44,7 @@ namespace WebSocketsServer
 
             app.UseStaticFiles();
 
-            app.UseSENACWebSockets("/ws");
+            app.UseSENACWebSockets<WebSocketMiddleware>("/ws");
 
             app.UseMvc(routes =>
             {

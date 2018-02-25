@@ -73,14 +73,14 @@ namespace WebSocketsServer.Middlewares
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class WebSocketMiddlewareExtensions
     {
-        public static IApplicationBuilder UseSENACWebSockets(this IApplicationBuilder app, string path)
+        public static IApplicationBuilder UseSENACWebSockets<T>(this IApplicationBuilder app, string path)
         {
-            return UseSENACWebSockets(app, path, new WebSocketOptions());
+            return UseSENACWebSockets<T>(app, path, new WebSocketOptions());
         }
-        public static IApplicationBuilder UseSENACWebSockets(this IApplicationBuilder app, string path, WebSocketOptions options)
+        public static IApplicationBuilder UseSENACWebSockets<T>(this IApplicationBuilder app, string path, WebSocketOptions options)
         {
             var pipeline = app.UseWebSockets(options);
-            return app.Map(new PathString(path), _ => _.UseMiddleware<WebSocketMiddleware>());
+            return app.Map(new PathString(path), _ => _.UseMiddleware<T>());
         }
     }
 }
