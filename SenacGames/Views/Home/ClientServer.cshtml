@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Client Server Game";
+}
+@section Styles {
+    <style type="text/css">
+        .zone {
+            background: url(@Url.Content("~/Images/bg.png")) no-repeat;
+            width: 800px;
+            height: 600px;
+        }
+
+        .cube {
+            position: absolute;
+            background-color: blue;
+            width: 50px;
+            height: 50px;
+        }
+
+        .own {
+            background-color: red;
+        }
+    </style>
+}
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            var self = this;
+            if ("WebSocket" in window) {
+                var webSocket = new WebSocket("ws://" + window.location.host + "/ClientServer");
+                var sessionID,
+                    lastPosition = undefined;
+
+                this.updatePosition = function (p) {
+                    if (p == undefined)
+                        return;
+
+                    var obj = {
+                        sender: sessionID,
+                        action: "POSITION",
+                        message: {
+                            x: p.left,
+                            y: p.top
+                        }
+                    };
+                    lastPosition = p;
+                    webSocket.send(JSON.stringify(obj));
+                }
+                webSocket.onmessage = function (message) {
+                    var obj = $.parseJSON(message.data);
+
+                    switch (obj.action) {
+                        case "ICONNECTED":
+                            sessionID = obj.sender;
+                            $(".zone").append($("<div class='cube own' data-id='" + obj.sender + "'></div>"));
+                            $(".cube.own").draggable({
+                                drag: function (event, ui) {
+                                    self.updatePosition(ui.position);
+                                }
+                            });
+                            break;
+
+                        case "CONNECTED":
+                            $(".zone").prepend($("<div class='cube' data-id='" + obj.sender + "'></div>"));
+                            window.setTimeout(self.updatePosition, 1000, lastPosition);
+                            break;
+
+                        case "PLAYERS":
+                            var players = $.parseJSON(obj.message);
+                            for (var i = 0; i < players.length; i++) {
+                                $(".zone").append($("<div class='cube' data-id='" + players[i].sender + "'></div>"));
+                            }
+                            break;
+
+                        case "CLOSED":
+                            $(".zone [data-id='" + obj.sender + "']").remove();
+                            break;
+
+                        case "POSITION":
+                            var position = obj.message;
+
+                            $(".zone [data-id='" + obj.sender + "']").css({
+                                top: parseInt(position.y),
+                                left: parseInt(position.x)
+                            });
+                            break;
+                    }
+                }
+            } else {
+                alert("Navegador não suporta WebSockets");
+            }
+        });
+    </script>
+}
+
+<div class="container">
+    <div class="row zone"></div>
+</div>

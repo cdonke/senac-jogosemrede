@@ -25,5 +25,10 @@ namespace SenacGames.Controllers
         {
             return View();
         }
+
+        public IActionResult ClientServer()
+        {
+            return View();
+        }
     }
 }

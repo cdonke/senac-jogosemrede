@@ -8,13 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="Views\" />
-    <Folder Include="Views\Home\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\scripts\" />
-    <Folder Include="Middlewares\" />
-    <Folder Include="Models\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
@@ -24,6 +21,7 @@
     <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.0.1" />
     <PackageReference Include="jQuery" Version="3.3.1" />
     <PackageReference Include="Microsoft.Azure.AppService" Version="0.2.2-alpha" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
