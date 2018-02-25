@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace WebSocketsServer
+namespace SenacGames
 {
     public class ZumoHandler : DelegatingHandler
     {

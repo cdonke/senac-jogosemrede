@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.MobileServices;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebSocketsServer.Controllers
+namespace SenacGames.Controllers
 {
     [Route("/api/WSMobileServices/{game}")]
     public class WSMobileServicesController : Controller

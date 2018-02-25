@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace WebSocketsServer.Models
+namespace SenacGames.Models
 {
     public class Leaderboard
     {

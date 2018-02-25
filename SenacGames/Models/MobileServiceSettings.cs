@@ -1,5 +1,5 @@
 ﻿using System;
-namespace WebSocketsServer.Models
+namespace SenacGames.Models
 {
     public class MobileServiceSettings
     {
