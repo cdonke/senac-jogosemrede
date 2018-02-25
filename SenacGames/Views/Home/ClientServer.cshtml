@@ -23,10 +23,14 @@
 }
 @section Scripts {
     <script type="text/javascript">
+        var wsServer = "ws://" + window.location.host + "/ClientServer";
+
         $(function () {
+            $("#wsServer").val(wsServer);
+
             var self = this;
             if ("WebSocket" in window) {
-                var webSocket = new WebSocket("ws://" + window.location.host + "/ClientServer");
+                var webSocket = new WebSocket(wsServer);
                 var sessionID,
                     lastPosition = undefined;
 
@@ -95,6 +99,18 @@
 <div class="container">
     <div class="row">
         <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <div class="row">
+        <h2>Mobile Application:</h2>
+        <div class="form-group">
+            <span class="col-md-2 control-label">Application URI:</span>
+            <input type="text" class="form-control" id="wsServer" readonly="readonly" />
+        </div>
+
+        <div class="form-group">
+            Download <a href="~/Downloads/Unity-WebSockets.zip">Unity WebSocket Package</a>
+        </div>
     </div>
 
     <div class="row">
