@@ -18,6 +18,7 @@
 
         .own {
             background-color: red;
+            z-index: 1000;
         }
     </style>
 }
@@ -81,6 +82,8 @@
 
                         case "POSITION":
                             var position = obj.message;
+                            if (typeof position === "string")
+                                position = JSON.parse(position);
 
                             $(".zone [data-id='" + obj.sender + "']").css({
                                 top: parseInt(position.y),
