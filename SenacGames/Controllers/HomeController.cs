@@ -30,5 +30,10 @@ namespace SenacGames.Controllers
         {
             return View();
         }
+
+        public IActionResult CardGame()
+        {
+            return View();
+        }
     }
 }
