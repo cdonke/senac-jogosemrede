@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewData["Title"] = "Unity 5 Networking";
+}
+
+@section Styles{
+    <style type="text/css">
+        ul.code {
+            font-family: "Lucida Console";
+            line-height: 0.5em;
+            white-space: pre-wrap;
+            list-style: none;
+        }
+
+        .box {
+            border: 3px solid red;
+            display: inline;
+            margin: 5px 0;
+        }
+    </style>
+}
+<div class="container">
+    <div class="row">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            Downloads: <a href="~/Downloads/Unity5-Network.zip">Unity 5 Network</a>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div>
+            <h3>Laboratório</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <h4>Partes</h4>
+        <ul>
+            <li>
+                GameObject em cena
+                <ul>
+                    <li>Componentes <b>Network Manager</b> e <b>Network Manager HUD</b></li>
+                </ul>
+            </li>
+
+            <li>
+                Prefab do <b>Player</b>
+                <ul>
+                    <li>Collider</li>
+                    <li>Scripts <b>PlayerMove</b>, <b>DestroyableObject</b> e <b>HitPointsBar</b></li>
+                    <li>Componentes <b>Network Identity</b> e <b>Network Transform</b></li>
+                </ul>
+            </li>
+
+            <li>
+                Prefab do <b>Bullet </b>
+                <ul>
+                    <li>Collider + Rigidbody</li>
+                    <li>Script <b>Bullet</b></li>
+                    <li>Componentes <b>Network Identity</b> e <b>Network Transform</b></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <h4>Scripts</h4>
+
+        <ul>
+            <li>
+                <b>Script - Controle do Jogador Local</b>
+                <ul class="code">
+                    <li>using UnityEngine;</li>
+                    <li>using UnityEngine.Networking;</li>
+                    <li></li>
+                    <li>public class PlayerMove : NetworkBehaviour {</li>
+                    <li></li>
+                    <li>    // ...</li>
+                    <li></li>
+                    <li>    public override void OnStartLocalPlayer () {</li>
+                    <li>        SmartCamera.GetInstance().SetTarget(this.gameObject);</li>
+                    <li>    }</li>
+                    <li></li>
+                    <li>    // Update is called once per frame</li>
+                    <li>    void Update () {</li>
+                    <li>        if (this.isLocalPlayer) {</li>
+                    <li>            // Controle do GameObject do jogador</li>
+                    <li>            float deltaTime = Time.smoothDeltaTime;</li>
+                    <li>            float horz = Input.GetAxis("Horizontal");</li>
+                    <li>            float vert = Input.GetAxis("Vertical");</li>
+                    <li>            this.transform.Rotate(0.0f, horz * ROTATE_RATE * deltaTime, 0.0f);</li>
+                    <li>            this.transform.position = this.transform.position +</li>
+                    <li>                this.transform.forward * vert * MOVE_RATE * deltaTime;</li>
+                    <li>            // ...</li>
+                    <li>        }</li>
+                    <li></li>
+                    <li>    }</li>
+                    <li>// ...}</li>
+                </ul>
+            </li>
+
+            <li>
+                <b>Script - disparos dos jogadores</b>
+                <ul class="code">
+                    <li>public class PlayerMove : NetworkBehaviour {</li>
+                    <li></li>
+                    <li>    void Update () {</li>
+                    <li>        if (this.isLocalPlayer) {</li>
+                    <li>            // Controle do GameObject do jogador (...)</li>
+                    <li>            if (Input.GetButtonDown("Fire1")) {</li>
+                    <li>                // Esta chamada eh feita pelos clientes, mas executada no servidor</li>
+                    <li>                CmdFireBullet();</li>
+                    <li>            }</li>
+                    <li>        }</li>
+                    <li>    }</li>
+                    <li></li>
+                    <li>    [Command]</li>
+                    <li>    void CmdFireBullet () {</li>
+                    <li>        // Metodo [Command] eh executado somente no servidor</li>
+                    <li>        Vector3 startPos = this.transform.position + this.transform.forward * 0.8f;</li>
+                    <li>        GameObject bullet = (GameObject) Instantiate(this.bulletPrefab, startPos,this.transform.rotation);</li>
+                    <li>
+                    <li>        // Velocidade do Rigidbody serah sincronizada nos clientes</li>
+                    <li>        bullet.GetComponent<Rigidbody>().velocity = transform.forward * BULLET_SPEED;</li>
+                    <li></li>
+                    <li>        // Faz bullet ser instanciada nos clientes</li>
+                    <li>        NetworkServer.Spawn(bullet);</li>
+                    <li></li>
+                    <li>        // Quando bullet for destruida no servidor, sera destruida tambem nos clientes</li>
+                    <li>        Destroy(bullet, BULLET_LIFETIME);</li>
+                    <li>    }</li>
+                    <li>}</li>
+                </ul>
+            </li>
+
+            <li>
+                <b>Script - dano aos jogadores</b>
+                <ul class="code">
+                    <li>public class DestroyableObject : NetworkBehaviour {</li>
+                    <li></li>
+                    <li>    [SyncVar]</li>
+                    <li>    public int hitPoints = MAX_HIT_POINTS;</li>
+                    <li></li>
+                    <li>    public void TakeDamage (int amount) {</li>
+                    <li>        if (this.isServer) {</li>
+                    <li>            this.hitPoints -= amount;</li>
+                    <li>            if (this.hitPoints <= 0) {</li>
+                    <li>                this.hitPoints = 0;</li>
+                    <li></li>
+                    <li>                if (this.gameObject.GetComponent<PlayerMove>() != null) {</li>
+                    <li>                    // Reinicia jogador. Soh os clientes executarao esse metodo</li>
+                    <li>                    RpcRespawn();</li>
+                    <li>                    this.hitPoints = MAX_HIT_POINTS;</li>
+                    <li>                }</li>
+                    <li>                else</li>
+                    <li>                    Destroy(this.gameObject); // Nao eh jogador, destroi o objeto</li>
+                    <li>            }</li>
+                    <li>        }</li>
+                    <li>    }</li>
+                    <li></li>
+                    <li>    [ClientRpc]</li>
+                    <li>    void RpcRespawn () {</li>
+                    <li>        if (this.isLocalPlayer) {</li>
+                    <li>            this.transform.position = Vector3.zero;</li>
+                    <li>            this.transform.rotation = Quaternion.identity;</li>
+                    <li>        }</li>
+                    <li>    }</li>
+                    <li>}</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</div>

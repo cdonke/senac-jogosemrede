@@ -35,5 +35,10 @@ namespace SenacGames.Controllers
         {
             return View();
         }
+
+        public IActionResult Networking()
+        {
+            return View();
+        }
     }
 }
